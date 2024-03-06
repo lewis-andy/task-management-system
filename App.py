@@ -91,6 +91,63 @@ def home():
     return render_template('index.html')
 
 
+@app.route('/sign_up', methods=['GET', 'POST'])
+def sign_up():
+    if request.method == 'POST':
+        username = request.form.get('username')
+        email = request.form.get('email')
+        password = request.form.get('password')
+        confirm_password = request.form.get('confirm_password')
+
+        # Check if passwords match
+        if password != confirm_password:
+            flash('Passwords do not match.', 'error')
+            return redirect(url_for('sign_up'))
+
+        # Check if the user already exists in the database
+        existing_user = User.query.filter_by(email=email).first()
+        if existing_user:
+            flash('Email already exists. Please use a different email.', 'error')
+            return redirect(url_for('sign_up'))
+
+        # Hash the password
+        password_hash = generate_password_hash(password)
+
+        # Create a new user with the provided email and hashed password
+        new_user = User(email=email, password_hash=generate_password_hash(password))
+
+        # Add the new user to the database
+        new_user = User(username=username, email=email, password_hash=password_hash)
+        db.session.add(new_user)
+        db.session.commit()
+
+        flash('Account created successfully. Please log in.', 'success')
+        return redirect(url_for('sign_in'))
+
+    return render_template('login.html')
+
+
+@app.route('/sign_in', methods=['GET', 'POST'])
+def sign_in():
+    if request.method == 'POST':
+        email = request.form.get('email')  # Safely retrieve email from form data
+        password = request.form.get('password')  # Safely retrieve password from form data
+
+        # Query the database to find a user with the provided email
+        user = User.query.filter_by(email=email).first()
+
+        # Check if the user exists and the password matches
+        if user and check_password_hash(user.password_hash, password):
+            flash('Login successful', 'success')
+            return redirect(url_for('home'))  # Redirect to the home page after successful login
+        else:
+            flash('Invalid email or password', 'error')
+            return redirect(url_for('sign_in'))  # Redirect back to the login page if login fails
+
+    # Render the login form template for GET requests
+    return render_template('login.html')
+
+
 # Ensure this is at the end of your script to run the application
 if __name__ == '__main__':
     with app.app_context():
