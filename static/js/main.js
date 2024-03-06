@@ -58,21 +58,16 @@ jQuery(document).ready(function($){
 
 
 
+//js for the landing page
+  function bannerSwitcher() {
+    next = $('.sec-1-input').filter(':checked').next('.sec-1-input');
+    if (next.length) next.prop('checked', true);
+    else $('.sec-1-input').first().prop('checked', true);
+  }
 
-// Add active class on another page linked
-// ==========================================
-// $(window).on('load',function () {
-//     var current = location.pathname;
-//     console.log(current);
-//     $('#navbarSupportedContent ul li a').each(function(){
-//         var $this = $(this);
-//         // if the current path is like this link, make it active
-//         if($this.attr('href').indexOf(current) !== -1){
-//             $this.parent().addClass('active');
-//             $this.parents('.menu-submenu').addClass('show-dropdown');
-//             $this.parents('.menu-submenu').parent().addClass('active');
-//         }else{
-//             $this.parent().removeClass('active');
-//         }
-//     })
-// });
+  var bannerTimer = setInterval(bannerSwitcher, 5000);
+
+  $('nav .controls label').click(function() {
+    clearInterval(bannerTimer);
+    bannerTimer = setInterval(bannerSwitcher, 5000)
+  });

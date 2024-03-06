@@ -44,7 +44,74 @@
         </div>
     </nav>
 
+<!-- Flash messages -->
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <div class="container mt-3">
+                {% for message in messages %}
+                    <div class="alert alert-info alert-dismissible fade show" role="alert">
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
 
+    {% block content %}
+
+    {% endblock %}
+
+<!-- Footer block -->
+{% block footer %}
+
+<footer class="footer">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-3 col-sm-6">
+        <h4>Tasky</h4>
+        <ul>
+          <li><a href="#">Home</a></li>
+          <li><a href="#">About</a></li>
+          <li><a href="#">Pricing</a></li>
+          <li><a href="#">Privacy Policy</a></li>
+        </ul>
+      </div>
+      <div class="col-md-3 col-sm-6">
+        <h4>Get Help</h4>
+        <ul>
+          <li><a href="#">Shipping</a></li>
+          <li><a href="#">Returns</a></li>
+          <li><a href="#">Order Status</a></li>
+          <li><a href="#">Payment Options</a></li>
+        </ul>
+      </div>
+      <div class="col-md-3 col-sm-6">
+        <h4>Address</h4>
+        <ul>
+          <li><a href="#">Lorem ipsum dolor sit amet consectetur, adipisicing elit.</a></li>
+        </ul>
+      </div>
+      <div class="col-md-3 col-sm-6">
+        <h4>Follow Us</h4>
+        <div class="social-links">
+          <a href="#"><i class="fab fa-google"></i></a>
+          <a href="#"><i class="fab fa-facebook-f"></i></a>
+          <a href="#"><i class="fab fa-instagram"></i></a>
+          <a href="#"><i class="fab fa-twitter"></i></a>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+
+    <footer class="footer bg-dark text-light py-2">
+        <div class="container text-center">
+            <span>&copy; 2024 Tasky. All rights reserved.</span>
+        </div>
+    </footer>
+{% endblock %}
 <!-- Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
