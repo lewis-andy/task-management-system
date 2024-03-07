@@ -3,12 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+
     <title>{% block title %}Task management system{% endblock %}</title>
      <!-- Bootstrap CSS -->
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <!-- Font Awesome CSS -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" rel="stylesheet">
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <link rel="stylesheet" href="/static/css/style.css">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
 	 <!-- Bootstrap CSS link -->
@@ -24,13 +28,13 @@
         <ul class="navbar-nav ml-auto">
             <div class="hori-selector"><div class="left"></div><div class="right"></div></div>
             <li class="nav-item">
-                <a class="nav-link" href="javascript:void(0);"><i class="fas fa-tachometer-alt"></i>Dashboard</a>
+                <a class="nav-link" href="{{ url_for('home') }}"><i class="fas fa-tachometer-alt"></i>Dashboard</a>
             </li>
             <li class="nav-item active">
-                <a class="nav-link" href="javascript:void(0);"><i class="far fa-address-book"></i>Tasks</a>
+                <a class="nav-link" href="{{ url_for('task') }}"><i class="far fa-address-book"></i>Tasks</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="javascript:void(0);"><i class="fas fa-user"></i>profile</a>
+                <a class="nav-link" href="{{ url_for('profile') }}"><i class="fas fa-user"></i>profile</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="javascript:void(0);"><i class="far fa-calendar-alt"></i>Calendar</a>
@@ -46,7 +50,7 @@
                     <a class="dropdown-item" href="#" style="color: red;">Account</a>
                     <a class="dropdown-item" href="{{url_for('sign_in')}}" style="color: red;">Sign In</a>
                     <div class="dropdown-divider"></div>
-                    <a class="dropdown-item" href="#" style="color: red;">Logout</a>
+                    <a class="dropdown-item" href="{{ url_for('logout') }}" style="color: red;">Logout</a>
                 </div>
             </li>
         </ul>
@@ -118,7 +122,8 @@
 
     <footer class="footer bg-dark text-light py-2">
         <div class="container text-center">
-            <span>&copy; 2024 Tasky. All rights reserved.</span>
+            <span>&copy; 2024 Tasky. All rights reserved.</span><br>
+            <span>Powered by Lewis.</span>
         </div>
     </footer>
 {% endblock %}

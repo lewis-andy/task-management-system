@@ -91,6 +91,12 @@ def home():
     return render_template('index.html')
 
 
+# 404 error handler
+@app.errorhandler(404)
+def page_not_found(error):
+    return render_template('404.html'), 404
+
+
 @app.route('/sign_up', methods=['GET', 'POST'])
 def sign_up():
     if request.method == 'POST':
@@ -146,6 +152,23 @@ def sign_in():
 
     # Render the login form template for GET requests
     return render_template('login.html')
+
+
+# logout route handler
+@app.route('/logout')
+def logout():
+    session.clear()
+    return redirect(url_for('sign_in'))
+
+
+@app.route('/task')
+def task():
+    return render_template('task.html')
+
+
+@app.route('/profile')
+def profile():
+    return render_template('profile.html')
 
 
 # Ensure this is at the end of your script to run the application
