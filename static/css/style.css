@@ -480,3 +480,37 @@ body {
 }
 
 /*Main Ends*/
+.features {
+    background-color: #f8f9fa;
+    padding: 60px 0;
+}
+
+.feature-container {
+    background-color: #fff;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    transition: transform 0.3s ease-in-out;
+}
+
+.feature-container:hover {
+    transform: translateY(-5px);
+}
+
+.feature-container img {
+    max-width: 100%;
+    height: auto;
+}
+
+.feature-container h3 {
+    color: #333;
+    font-weight: bold;
+    margin-bottom: 15px;
+}
+
+.feature-container p {
+    color: #666;
+    font-size: 16px;
+    line-height: 1.6;
+}

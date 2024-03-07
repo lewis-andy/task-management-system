@@ -145,7 +145,7 @@ def sign_in():
         # Check if the user exists and the password matches
         if user and check_password_hash(user.password_hash, password):
             flash('Login successful', 'success')
-            return redirect(url_for('home'))  # Redirect to the home page after successful login
+            return redirect(url_for('index'))  # Redirect to the home page after successful login
         else:
             flash('Invalid email or password', 'error')
             return redirect(url_for('sign_in'))  # Redirect back to the login page if login fails
@@ -158,15 +158,24 @@ def sign_in():
 @app.route('/logout')
 def logout():
     session.clear()
+    flash('you have been logged out')
     return redirect(url_for('sign_in'))
 
 
+@app.route('/index')
+@login_required
+def index():
+    return render_template('home.html')
+
+
 @app.route('/task')
+@login_required
 def task():
     return render_template('task.html')
 
 
 @app.route('/profile')
+@login_required
 def profile():
     return render_template('profile.html')
 

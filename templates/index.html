@@ -66,23 +66,37 @@
 <!-- Features Section -->
 <section class="features">
     <div class="container">
-        <h2>Features</h2>
+        <h2 class="text-center mb-4">Features</h2>
         <div class="row">
             <div class="col-md-4">
-                <h3>Task Organization</h3>
-                <p>Easily organize your tasks into categories or projects.</p>
+                <div class="feature-container">
+                    <img src="../static/img/4942219.jpg" alt="Task Organization" class="img-fluid mb-3">
+                    <h3>Task Organization</h3>
+                    <p>Easily organize your tasks into categories or projects.</p>
+                     <a href="{{url_for('sign_in')}}" class="btn btn-primary">Get Started</a>
+
+                </div>
             </div>
             <div class="col-md-4">
-                <h3>Priority Management</h3>
-                <p>Set priorities for tasks to focus on what's important.</p>
+                <div class="feature-container">
+                    <img src="../static/img/6860680.jpg" alt="Priority Management" class="img-fluid mb-3">
+                    <h3>Priority Management</h3>
+                    <p>Set priorities for tasks to focus on what's important.</p>
+                     <a href="{{url_for('sign_in')}}" class="btn btn-primary">Get Started</a>
+                </div>
             </div>
             <div class="col-md-4">
-                <h3>Deadline Tracking</h3>
-                <p>Keep track of deadlines and due dates for your tasks.</p>
+                <div class="feature-container">
+                    <img src="../static/img/5385957.jpg" alt="Deadline Tracking" class="img-fluid mb-3">
+                    <h3>Deadline Tracking</h3>
+                    <p>Keep track of deadlines and due dates for your tasks.</p>
+                     <a href="{{url_for('sign_in')}}" class="btn btn-primary">Get Started</a>
+                </div>
             </div>
         </div>
     </div>
 </section>
+
 {% endblock %}
 </body>
 </html>
