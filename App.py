@@ -163,19 +163,19 @@ def logout():
 
 
 @app.route('/index')
-@login_required
+# @login_required
 def index():
-    return render_template('home.html')
+    return render_template('home.html', current_user=current_user)
 
 
 @app.route('/task')
-@login_required
+# @login_required
 def task():
     return render_template('task.html')
 
 
 @app.route('/profile')
-@login_required
+# @login_required
 def profile():
     return render_template('profile.html')
 
