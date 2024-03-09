@@ -9,7 +9,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from flask_migrate import Migrate
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
 from sqlalchemy.orm import joinedload
-
+import logging
 from datetime import datetime
 
 app = Flask(__name__)
@@ -22,12 +22,23 @@ login_manager = LoginManager(app)
 login_manager.init_app(app)
 
 
-class User(db.Model):
+class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(100), unique=True, nullable=False)
     password_hash = db.Column(db.String(255), nullable=False)
     email = db.Column(db.String(255))
+    is_admin = db.Column(db.Boolean, default=False)
     created_at = db.Column(db.TIMESTAMP, server_default=db.func.current_timestamp())
+
+    @property
+    def is_active(self):
+        return True
+
+    def get_id(self):
+        return str(self.id)
+
+    def __repr__(self):
+        return '<User {}>'.format(self.username)
 
 
 class Task(db.Model):
@@ -42,6 +53,11 @@ class Task(db.Model):
     created_at = db.Column(db.TIMESTAMP, server_default=db.func.current_timestamp())
     updated_at = db.Column(db.TIMESTAMP, server_default=db.func.current_timestamp(),
                            onupdate=db.func.current_timestamp())
+
+
+# Enable SQLAlchemy logging for debugging
+logging.basicConfig()
+logging.getLogger('sqlalchemy.engine').setLevel(logging.INFO)
 
 
 class TaskAssignee(db.Model):
@@ -104,6 +120,7 @@ def sign_up():
         email = request.form.get('email')
         password = request.form.get('password')
         confirm_password = request.form.get('confirm_password')
+        is_admin = request.form.get('is_admin')
 
         # Check if passwords match
         if password != confirm_password:
@@ -144,8 +161,14 @@ def sign_in():
 
         # Check if the user exists and the password matches
         if user and check_password_hash(user.password_hash, password):
+            login_user(user)
             flash('Login successful', 'success')
-            return redirect(url_for('index'))  # Redirect to the home page after successful login
+            if user.is_admin:  # Check if the user is an admin
+                # Redirect to admin dashboard if user is an admin
+                return redirect(url_for('admin_dashboard'))
+            else:
+                # Redirect to the home page after successful login if user is not an admin
+                return redirect(url_for('index'))
         else:
             flash('Invalid email or password', 'error')
             return redirect(url_for('sign_in'))  # Redirect back to the login page if login fails
@@ -156,28 +179,85 @@ def sign_in():
 
 # logout route handler
 @app.route('/logout')
+@login_required
 def logout():
     session.clear()
     flash('you have been logged out')
     return redirect(url_for('sign_in'))
 
 
+@app.route('/admin_dashboard')
+@login_required
+def admin_dashboard():
+    return render_template('admin/admin.html')
+
+
 @app.route('/index')
-# @login_required
+@login_required
 def index():
     return render_template('home.html', current_user=current_user)
 
 
 @app.route('/task')
-# @login_required
+@login_required
 def task():
     return render_template('task.html')
 
 
 @app.route('/profile')
-# @login_required
+@login_required
 def profile():
     return render_template('profile.html')
+
+
+@app.route('/add_task', methods=['GET', 'POST'])
+def add_task():
+    if request.method == 'POST':
+        title = request.form['title']
+        description = request.form['description']
+        due_date = datetime.strptime(request.form['due_date'], '%Y-%m-%d').date()
+        priority = request.form['priority']
+        status = request.form['status']
+        # current user logged in
+        user_id = current_user.id
+
+        # Create a new Task object with the provided data
+        new_task = Task(title=title, description=description, due_date=due_date,
+                        priority=priority, status=status, user_id=user_id)
+
+        db.session.add(new_task)
+        db.session.commit()
+        return redirect(url_for('index'))
+    else:
+
+        return render_template('add_task.html')
+
+
+@app.route('/view_users')
+@login_required
+def view_users():
+    try:
+        # Fetch user data from the database
+        users = User.query.all()
+        return render_template('admin/admin.html', users=users)
+    except SQLAlchemyError as e:
+        # Log the SQLAlchemy error
+        app.logger.error(f'SQLAlchemy error: {str(e)}')
+        # Handle the error appropriately
+        return render_template('404.html', error_message='An error occurred while accessing the database.')
+
+
+@app.route('/tasks')
+def view_tasks():
+    try:
+        # Fetch tasks from the database
+        tasks = Task.query.all()
+        # Render template with tasks data
+        return render_template('tasks.html', tasks=tasks)
+    except Exception as e:
+        # Log any exceptions that occur during fetching tasks
+        app.logger.error(f"Error fetching tasks: {str(e)}")
+        return "An error occurred while fetching tasks."
 
 
 # Ensure this is at the end of your script to run the application

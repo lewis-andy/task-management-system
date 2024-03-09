@@ -5,7 +5,12 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
     <link rel="stylesheet/text" href="../static/css/login.css">
+	 <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <style>
+
 
 @import url('https://fonts.googleapis.com/css?family=Montserrat:400,800');
 
@@ -263,6 +268,10 @@ input {
 			<input type="email" placeholder="Email"  name="email" required />
 			<input type="password" placeholder="Password" name="password" required />
             <input type="password" placeholder="confirm password" name="confirm_password" required />
+				  <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="1" id="is_admin" name="is_admin">
+            <label class="form-check-label" for="is_admin">Register as Admin</label>
+        </div>
 			<button>Sign Up</button>
 			</div>
 		</form>
